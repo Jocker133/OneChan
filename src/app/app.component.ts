@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
       </li>
     </ul>
     <router-outlet></router-outlet>
+    <chan-post-detail><chan-post-detail>
   `,
   styles: []
 })
