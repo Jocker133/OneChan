@@ -9,4 +9,5 @@ enum Role {
 export class Post extends Thread {
     parentid: number;
     role: Role;
+    threadHead: boolean;
 }
