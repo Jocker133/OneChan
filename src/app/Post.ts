@@ -7,7 +7,7 @@ enum Role {
 }
 
 export class Post extends Thread {
-    parentid: number;
+    parentid: string;
     role: Role;
     threadHead: boolean;
 }

@@ -21,7 +21,7 @@ export class PostService {
 
    createNewEvent():Post {
     return {
-      id: 1,
+      id: "1",
       date: new Date(),
       img: "test_image",
       message: "texte",
@@ -79,7 +79,7 @@ export class PostService {
         });
   }
 
-  get(id: number) {
+  get(id: string) {
     const contactsList = this.postSubject.getValue();
 
     return contactsList.find(post => post.id = id);

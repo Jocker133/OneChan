@@ -1,5 +1,5 @@
 export class Thread {
-    id: number;
+    id: string;
     date: Date;
     img: string;
     message: string;

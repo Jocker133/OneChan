@@ -1,0 +1,30 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "post":[
+    {
+      "id": "51758d51-2a48-45f5-b2cc-3951e078ac4c",
+      "date": "",
+      "img": "",
+      "message": "",
+      "parentid": null,
+      "role": 3,
+      "threadHead": true
+    }
+  ]
+}
