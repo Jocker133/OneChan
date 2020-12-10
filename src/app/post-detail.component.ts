@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Post } from './Post';
 import { Thread } from './Thread';
 
@@ -7,11 +7,6 @@ import { Thread } from './Thread';
   template: `
     <button (click)="displayForm()">Add a Post</button>
     <chan-post-form *ngIf="add" [post]="post"></chan-post-form>
-    <p>id = {{ post.id }}</p>
-    <p>date = {{ post.date }}</p>
-    <p>img = {{ post.img }}</p>
-    <p>message = {{ post.message }}</p>
-    <p>{{add}}</p>
   `,
   styles: [
   ]
@@ -24,7 +19,6 @@ export class PostDetailComponent implements OnInit {
   }
 
   displayForm() {
-    console.log("error");
     if(!this.add)
       this.add = true;
     else

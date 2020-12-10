@@ -19,9 +19,9 @@
   "post":[
     {
       "id": "51758d51-2a48-45f5-b2cc-3951e078ac4c",
-      "date": "",
-      "img": "",
-      "message": "",
+      "date": "la date d'aujourd'hui",
+      "img": "une image",
+      "message": "Un message de test",
       "parentid": null,
       "role": 3,
       "threadHead": true

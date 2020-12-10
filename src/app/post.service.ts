@@ -10,7 +10,7 @@ import { HttpClient } from "@angular/common/http";
 })
 export class PostService {
   private postSubject: BehaviorSubject<Array<Post>> = new BehaviorSubject<Array<Post>>([]);
-  postApiUrl = environment.apiUrl + 'posts/';
+  postApiUrl = environment.apiUrl + 'post';
 
   constructor(private postIdService: PostIdService, private http: HttpClient) {
     this.http.get<Array<Post>>(this.postApiUrl)

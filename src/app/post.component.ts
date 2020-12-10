@@ -5,7 +5,7 @@ import { Post } from './Post';
   selector: 'chan-post',
   template: `
     <p>
-      {{ post.id }} - {{ post.message }}
+      {{ post.date }} - {{ post.message }} - {{ post.img }}
     </p>
   `,
   styles: [
