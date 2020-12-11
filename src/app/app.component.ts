@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
       Welcome to {{title}}!
     </h1>
     <router-outlet></router-outlet>
-    <chan-post-detail><chan-post-detail>
+    <!--<chan-post-detail><chan-post-detail>-->
   `,
   styles: []
 })

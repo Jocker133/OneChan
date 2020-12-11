@@ -6,16 +6,17 @@ import { Thread } from './Thread';
   selector: 'chan-post-detail',
   template: `
     <button (click)="displayForm()">Add a Post</button>
-    <chan-post-form *ngIf="add" [post]="post"></chan-post-form>
+    <!--<chan-post-form *ngIf="add" [post]="post"></chan-post-form>-->
   `,
   styles: [
   ]
 })
 export class PostDetailComponent implements OnInit {
   add: boolean = false;
+  //post: Post;
 
   post: Post = {
-    id : "1", date: new Date(), img : "test_image", message : "texte", parentid: null, role: 3, threadHead: false
+    id : "1", date: new Date(), img : "Votre image", message : "Votre texte", parentid: null, role: 3, threadHead: false
   }
 
   displayForm() {

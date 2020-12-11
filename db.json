@@ -16,15 +16,24 @@
   "profile": {
     "name": "typicode"
   },
-  "post":[
+  "post": [
     {
       "id": "51758d51-2a48-45f5-b2cc-3951e078ac4c",
-      "date": "la date d'aujourd'hui",
+      "date": "la date auj",
+      "message": "un message de test",
       "img": "une image",
-      "message": "Un message de test",
       "parentid": null,
       "role": 3,
-      "threadHead": true
+      "threadHead": false
+    },
+    {
+      "id": "076a2e12-fc7a-43c0-bf79-cbf79a1f99cd",
+      "date": "2020-12-11T13:11:18.746Z",
+      "img": "test_image",
+      "message": "du texte pour exemple",
+      "parentid": null,
+      "role": 3,
+      "threadHead": false
     }
   ]
 }

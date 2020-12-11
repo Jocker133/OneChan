@@ -8,19 +8,12 @@ import * as post from "../../db.json";
 @Component({
   selector: 'chan-post-list',
   template: `
-    <button>Add a thread</button>
+    <button (click)="addContact()">Add a post</button>
     <ul>
-      <li *ngFor="let currentPost of data.post">
-        <div *ngIf="currentPost.img == null">
-          Error
-        
-        </div>
-        <div *ngIf="currentPost.img != null">
-        {{ currentPost.img }} - {{ currentPost.message }}
-        </div>
-        <!--<chan-post
-              [post] = "post"
-        ></chan-post>-->
+      <li *ngFor="let currentPost of pos | async">
+        <chan-post [post]="currentPost"></chan-post>
+        <button (click)="editContact(currentPost)">Edit</button>
+        <button (click)="deleteContact(currentPost)">Delete</button>
       </li>
     </ul>
   `,
@@ -48,7 +41,7 @@ export class PostListComponent implements OnInit {
   }
 
   addContact() {
-    this.data.post.threadHead = true;
+    this.data.post.threadHead = false;
     this.router.navigate(['posts', 'new']);
   }
 

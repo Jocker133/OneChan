@@ -21,10 +21,10 @@ export class PostService {
 
    createNewEvent():Post {
     return {
-      id: "1",
+      id: null,
       date: new Date(),
       img: "test_image",
-      message: "texte",
+      message: "du texte pour exemple",
       parentid: null,
       role: 3,
       threadHead: false
