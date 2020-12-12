@@ -3,7 +3,8 @@ import {NgForm} from "@angular/forms";
 import { Post } from './Post';
 import * as posts from '../../db.json';
 import { PostService } from './post.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router , ParamMap} from '@angular/router';
+import { PostListComponent } from './post-list.component';
 
 @Component({
   selector: 'chan-post-form',
@@ -11,8 +12,7 @@ import { Router } from '@angular/router';
     <h3>Create a new post</h3>
     <form #formElement="ngForm" (ngSubmit)="modify(formElement)">
       <label>Image:
-        <input *ngIf="post.threadHead == true" type="file" name="image" [(ngModel)]="post.img" required>
-        <input *ngIf="post.threadHead == false"name="image" [(ngModel)]="post.img">
+        <input name="image" [(ngModel)]="post.img">
       </label>
       <label>Message:
         <input name="message" [(ngModel)]="post.message" required>
@@ -26,19 +26,10 @@ import { Router } from '@angular/router';
 })
 export class PostFormComponent implements OnInit {
   @Input() post: Post;
-  //data: any = (posts as any).default;
   createMode = false
 
-  /*onSubmit(form: NgForm) {
-    this.post.date = new Date();
-    this.post.parentid = null;
-    this.post.role = 3;
-    this.post.threadHead = false;
-    this.post.id = "3";
-    this.data.post.push(this.post);
-  }*/
 
-  constructor(private postService: PostService, private router: Router) { }
+  constructor(private postService: PostService, private router: Router, private postList: PostListComponent, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     if (!this.post) {
@@ -48,6 +39,13 @@ export class PostFormComponent implements OnInit {
   }
 
   modify(formElement: NgForm) {
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        const isHead = params.get('isHead');
+        if(isHead == 'true')
+          this.post.threadHead = true;
+        if(isHead == 'false')
+          this.post.threadHead = false;
+      })
       this.postService.addOrModify(this.post);
       this.router.navigate(['/']);
   }

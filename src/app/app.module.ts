@@ -13,6 +13,7 @@ import { PostComponent } from './post.component';
 import { PostEditComponent } from './post-edit.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import {MatCardModule} from '@angular/material/card';
     HttpClientModule,
     BrowserAnimationsModule,
     MatCardModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

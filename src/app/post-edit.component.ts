@@ -26,6 +26,7 @@ export class PostEditComponent implements OnInit {
         this.post = this.postService.get(id);
       }
 
+
       this.loading = false;
     });
   }
