@@ -11,6 +11,9 @@ import { PostsComponent } from './posts.component';
 import { PostListComponent } from './post-list.component';
 import { PostComponent } from './post.component';
 import { PostEditComponent } from './post-edit.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatCardModule} from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { PostEditComponent } from './post-edit.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

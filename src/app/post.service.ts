@@ -31,6 +31,18 @@ export class PostService {
     };
   }
 
+  createNewEvent2():Post {
+    return {
+      id: null,
+      date: new Date(),
+      img: "test_image",
+      message: "du texte pour exemple",
+      parentid: null,
+      role: 3,
+      threadHead: true
+    };
+  }
+
   getList() {
     return this.postSubject.asObservable();
   }
