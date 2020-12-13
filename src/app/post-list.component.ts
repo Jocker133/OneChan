@@ -21,7 +21,7 @@ import * as post from "../../db.json";
         <mat-card-header>
           <mat-card-title>Anonymous</mat-card-title>
           <mat-card-subtitle>{{ currentPost.date }} - {{ currentPost.id }} - role : {{ currentPost.role }}</mat-card-subtitle>
-          <button mat-button class="collapse-button" *ngIf="currentPost.threadHead && messages(currentPost)" (click)="gestionDisplay()">{{ signe[indexOfstring] }}</button>
+          <button mat-button class="collapse-button" *ngIf="messages(currentPost)" (click)="gestionDisplay(currentPost)">{{ signe[indexOfstring] }}</button>
         </mat-card-header>
         <mat-card-content>
           {{ currentPost.message }}
@@ -30,10 +30,10 @@ import * as post from "../../db.json";
           <button mat-button (click)="editContact(currentPost)">Edit</button>
           <button mat-button (click)="deleteContact(currentPost)">Delete</button>
         </mat-card-actions>
-        <button mat-button (click)="addContact2()">Add a post in this thread</button>
+        <button mat-button (click)="addContact2(currentPost)">Add a post in this thread</button>
       </div>
 
-      <div *ngIf="!currentPost.threadHead && display">
+      <div *ngIf="!currentPost.threadHead && !displayPosts.includes(currentPost)">
         <div class="display_post">
         <mat-card-header>
           <mat-card-title>Anonymous</mat-card-title>
@@ -80,18 +80,23 @@ import * as post from "../../db.json";
 export class PostListComponent implements OnInit {
   pos: Observable<Array<Post>>;
   data: any = (post as any).default;
-  display: boolean = true;
   signe: string[] = ["-", "+"];
   indexOfstring: number = 0;
   arrayOfPost: Post[];
   index: number;
-  isHead: boolean;
+  displayPosts: Post[];
+  getPosts: Post[];
+  indexThread: number;
+  indexPosts: number;
+  arrayInsert: Post[];
+  indexInsert: number;
   
 
   constructor(private postService: PostService, private router: Router) { }
 
   ngOnInit(): void {
     this.pos = this.postService.getList();
+    this.displayPosts = []
   }
 
   deleteContact(post: Post) {
@@ -99,24 +104,50 @@ export class PostListComponent implements OnInit {
   }
 
   editContact(post: Post) {
-    this.router.navigate(['posts', post.id, 'edit']);
+    this.router.navigate(['posts', post.id, 'edit', 'true', post.threadHead]);
   }
 
   addContact() {
-    this.isHead = true;
-    this.router.navigate(['posts', 'new', 'true']);
+    this.router.navigate(['posts', 'new', 'true', '']);
   }
 
-  addContact2() {
-    this.isHead = false;
-    this.router.navigate(['posts', 'new', 'false']);
+  addContact2(currentPost: Post) {
+    this.postService.getList()
+        .subscribe(post => {
+          this.arrayInsert = post as Post[]
+        })
+    this.indexInsert = this.arrayInsert.findIndex(post => post.id == currentPost.id)
+    
+    /*while(this.arrayInsert[this.indexInsert+1] && !this.arrayInsert[this.indexInsert+1].threadHead) {
+      this.indexInsert+=1
+    }*/
+    //this.indexInsert+=1
+    this.router.navigate(['posts', 'new', 'false', this.indexInsert]);
   }
 
-  gestionDisplay() {
-    if(this.display)
+  gestionDisplay(currentPost: Post) {
+    /*if(this.display)
       this.display = false
     else
-      this.display = true
+      this.display = true*/
+    
+    this.postService.getList()
+        .subscribe(post => {
+          this.getPosts = post as Post[]
+        })
+    this.indexThread = this.getPosts.indexOf(currentPost);
+    
+      while(this.getPosts[this.indexThread+1] && !this.getPosts[this.indexThread+1].threadHead) {
+        if(this.displayPosts.includes(this.getPosts[this.indexThread+1])) {
+          this.indexPosts = this.displayPosts.indexOf(this.getPosts[this.indexThread+1])
+          this.displayPosts.splice(this.indexPosts, 1)
+        }
+        else {
+          this.displayPosts.push(this.getPosts[this.indexThread+1])
+        }
+        this.indexThread+=1;
+      }
+    
     if(this.indexOfstring == 0)
       this.indexOfstring = 1
     else
@@ -141,5 +172,6 @@ export class PostListComponent implements OnInit {
       return false;
     }
   }
+
 
 }

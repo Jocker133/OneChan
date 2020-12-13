@@ -26,7 +26,8 @@ import { PostListComponent } from './post-list.component';
 })
 export class PostFormComponent implements OnInit {
   @Input() post: Post;
-  createMode = false
+  createMode = false;
+  arrayPosts: Post[];
 
 
   constructor(private postService: PostService, private router: Router, private postList: PostListComponent, private route: ActivatedRoute) { }
@@ -40,13 +41,29 @@ export class PostFormComponent implements OnInit {
 
   modify(formElement: NgForm) {
       this.route.paramMap.subscribe((params: ParamMap) => {
-        const isHead = params.get('isHead');
-        if(isHead == 'true')
-          this.post.threadHead = true;
-        if(isHead == 'false')
-          this.post.threadHead = false;
+        const isHead = params.get('isHead') == 'true';
+        const edit = params.get('edit') == 'true';
+        const head = params.get('head') == 'true'
+        if(this.post.id) {
+          this.post.threadHead = head
+          this.postService.addOrModify(this.post);
+        } else {
+          this.post.threadHead = isHead;
+          if(isHead) {
+            this.postService.addOrModify(this.post);
+          } else {
+            this.postService.getList()
+                .subscribe(post => {
+            this.arrayPosts = post as Post[]
+          })
+            const index = params.get('index');
+            const realIndex = +index
+            this.postService.insert(this.post, this.arrayPosts[realIndex]);
+          }
+        
+      }
       })
-      this.postService.addOrModify(this.post);
+      
       this.router.navigate(['/']);
   }
 }
