@@ -74,25 +74,23 @@ export class PostService {
         });
   }
 
-  insert(post: Post, post2: Post) {
+  insert(post: Post, index: number) {
     post.id = this.postIdService.get();
     this.http.post(this.postApiUrl, post)
         .subscribe(() => {
-          var contactsTab;
-          this.postObservable.subscribe(observer => contactsTab = observer)
-         const index = contactsTab.indexOf(post2)
-         contactsTab.splice(index+1, 0, post);
-          this.postObservable.subscribe(observer => observer = contactsTab)
+          const contactsTab = this.postSubject.getValue()
+          const inter = this.postSubject.getValue()
           
-          /*this.arrayDebut = contactsTab.slice(0, index)
-          this.arrayEnd = contactsTab.slice(index+1, contactsTab.length)
-        this.arrayDebut.push(post);
-        this.arrayDebut = this.arrayDebut.concat(this.arrayEnd);*/
-        
-
-          //this.postSubject.next(contactsTab);
-          
-          
+          const tab = contactsTab.slice(index, contactsTab.length)
+          for(var i = index; i< this.postSubject.getValue().length; i++) {
+            this.delete(contactsTab[i]);
+          }
+          console.log(this.postSubject.getValue())
+          this.add(post)
+          this.delete(post)
+          for(var j = 0; j< tab.length; j++) {
+            this.add(tab[j])
+          }
           
         });
   }

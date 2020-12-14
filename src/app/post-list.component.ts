@@ -16,7 +16,7 @@ import * as post from "../../db.json";
     <button mat-button (click)="addContact()">Add a thread</button>
     
     
-      <mat-card *ngFor="let currentPost of pos | async">
+      <mat-card *ngFor="let currentPost of pos | async; let i = index">
       <div *ngIf="currentPost.threadHead" class="head">
         <mat-card-header>
           <mat-card-title>Anonymous</mat-card-title>
@@ -28,9 +28,9 @@ import * as post from "../../db.json";
         </mat-card-content>
         <mat-card-actions>
           <button mat-button (click)="editContact(currentPost)">Edit</button>
-          <button mat-button (click)="deleteContact(currentPost)">Delete</button>
+          <button mat-button (click)="deleteContact2(currentPost, i)">Delete</button>
         </mat-card-actions>
-        <button mat-button (click)="addContact2(currentPost)">Add a post in this thread</button>
+        <button mat-button (click)="addContact2(i)">Add a post in this thread</button>
       </div>
 
       <div *ngIf="!currentPost.threadHead && !displayPosts.includes(currentPost)">
@@ -45,20 +45,13 @@ import * as post from "../../db.json";
         <mat-card-actions>
           <button mat-button>Answer</button>
           <button mat-button (click)="editContact(currentPost)">Edit</button>
-          <button mat-button (click)="deleteContact(currentPost)">Delete</button>
+          <button mat-button (click)="deleteContact(currentPost, i)">Delete</button>
         </mat-card-actions>
         </div>
       </div>
       
       </mat-card>
-    
-    <!--<ul>
-      <li *ngFor="let currentPost of pos | async">
-        <chan-post [post]="currentPost"></chan-post>
-        <button (click)="editContact(currentPost)">Edit</button>
-        <button (click)="deleteContact(currentPost)">Delete</button>
-      </li>
-    </ul>-->
+   
   `,
   styles: [
     `
@@ -90,6 +83,7 @@ export class PostListComponent implements OnInit {
   indexPosts: number;
   arrayInsert: Post[];
   indexInsert: number;
+  arrayDelete: Post[];
   
 
   constructor(private postService: PostService, private router: Router) { }
@@ -97,6 +91,24 @@ export class PostListComponent implements OnInit {
   ngOnInit(): void {
     this.pos = this.postService.getList();
     this.displayPosts = []
+  }
+
+  deleteContact2(post: Post, i: number) {
+    this.postService.getList()
+          .subscribe(post => {
+            this.arrayDelete = post as Post[]
+          })
+    if(this.arrayDelete[i+1] && !this.arrayDelete[i+1].threadHead) {
+      var j = i
+      j++
+      while(this.arrayDelete[j] && !this.arrayDelete[j].threadHead) {
+        this.postService.delete(this.arrayDelete[j])
+        j++
+      }
+      this.postService.delete(this.arrayDelete[i])
+    } else {
+      this.postService.delete(post);
+    }
   }
 
   deleteContact(post: Post) {
@@ -108,28 +120,26 @@ export class PostListComponent implements OnInit {
   }
 
   addContact() {
-    this.router.navigate(['posts', 'new', 'true', '']);
+    this.router.navigate(['posts', 'new', 'true', '', '']);
   }
 
-  addContact2(currentPost: Post) {
+  addContact2(i: number) {
+    var test: boolean = true
     this.postService.getList()
         .subscribe(post => {
           this.arrayInsert = post as Post[]
         })
-    this.indexInsert = this.arrayInsert.findIndex(post => post.id == currentPost.id)
-    
-    /*while(this.arrayInsert[this.indexInsert+1] && !this.arrayInsert[this.indexInsert+1].threadHead) {
-      this.indexInsert+=1
-    }*/
-    //this.indexInsert+=1
-    this.router.navigate(['posts', 'new', 'false', this.indexInsert]);
+    while(this.arrayInsert[i+1] && !this.arrayInsert[i+1].threadHead) {
+      i+=1
+    }
+    if(this.arrayInsert[i+1] && this.arrayInsert[i+1].threadHead) {
+      i+=1
+      test = false
+    }
+    this.router.navigate(['posts', 'new', 'false', i, test]);
   }
 
   gestionDisplay(currentPost: Post) {
-    /*if(this.display)
-      this.display = false
-    else
-      this.display = true*/
     
     this.postService.getList()
         .subscribe(post => {

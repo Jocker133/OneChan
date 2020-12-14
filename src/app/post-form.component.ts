@@ -42,6 +42,7 @@ export class PostFormComponent implements OnInit {
   modify(formElement: NgForm) {
       this.route.paramMap.subscribe((params: ParamMap) => {
         const isHead = params.get('isHead') == 'true';
+        const last = params.get('last') == 'true';
         const edit = params.get('edit') == 'true';
         const head = params.get('head') == 'true'
         if(this.post.id) {
@@ -52,13 +53,13 @@ export class PostFormComponent implements OnInit {
           if(isHead) {
             this.postService.addOrModify(this.post);
           } else {
-            this.postService.getList()
-                .subscribe(post => {
-            this.arrayPosts = post as Post[]
-          })
             const index = params.get('index');
             const realIndex = +index
-            this.postService.insert(this.post, this.arrayPosts[realIndex]);
+            if(last) {
+              this.postService.addOrModify(this.post);
+            } else {
+              this.postService.insert(this.post, realIndex);
+            }
           }
         
       }
