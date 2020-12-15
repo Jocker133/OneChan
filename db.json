@@ -38,15 +38,6 @@
       "threadHead": false
     },
     {
-      "id": "be13db0d-9966-432d-89a7-496b8ee67b6d",
-      "date": "2020-12-15T14:01:39.885Z",
-      "img": "test_image",
-      "message": "Un message",
-      "parentid": null,
-      "role": "Modérateur",
-      "threadHead": false
-    },
-    {
       "id": "b8ae6ecc-c894-4201-8a6c-594aed60afa2",
       "date": "2020-12-15T14:21:24.500Z",
       "img": "test_image",
@@ -58,48 +49,13 @@
       "threadHead": false
     },
     {
-      "id": "92545e96-d0fd-4080-ae12-ffa8e9e5c509",
-      "date": "2020-12-15T14:21:48.667Z",
-      "img": "test_image",
-      "message": "Un message réponse",
-      "parentid": "11f3e699-01e3-4ac7-9f35-acd65dda33a2",
-      "role": [
-        "Anonymous"
-      ],
-      "threadHead": false
-    },
-    {
-      "id": "216f9a38-ca53-41f4-bd42-4547a604d636",
-      "date": "2020-12-15T14:21:42.266Z",
+      "id": "71d3632b-9e73-4079-b3e1-7a2a74eb6e8a",
+      "date": "2020-12-15T20:29:21.046Z",
       "img": "test_image",
       "message": "Un message",
       "parentid": null,
-      "role": [
-        "Anonymous"
-      ],
+      "role": "Administrateur",
       "threadHead": true
-    },
-    {
-      "id": "c0c3c15e-0bb6-437e-88c5-2bb7c66a943e",
-      "date": "2020-12-15T14:22:26.727Z",
-      "img": "test_image",
-      "message": "Un message",
-      "parentid": "",
-      "role": [
-        "Anonymous"
-      ],
-      "threadHead": false
-    },
-    {
-      "id": "fd258cce-4e4a-424a-a5db-77008076ddfb",
-      "date": "2020-12-15T14:22:34.684Z",
-      "img": "test_image",
-      "message": "Un message",
-      "parentid": "c0c3c15e-0bb6-437e-88c5-2bb7c66a943e",
-      "role": [
-        "Anonymous"
-      ],
-      "threadHead": false
     }
   ]
 }

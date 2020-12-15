@@ -43,8 +43,12 @@ export class PostFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Gère l'ajout et l'insertion de posts et tête de thread
+   * @param formElement 
+   */
+
   modify(formElement: NgForm) {
-    console.log(this.post.img);
       this.route.paramMap.subscribe((params: ParamMap) => {
         const isHead = params.get('isHead') == 'true';
         const last = params.get('last') == 'true';

@@ -27,6 +27,10 @@ export class PostService {
     
    }
 
+   /**
+    * Crée le contenu par défaut d'un post ou d'une tête de thread
+    */
+
    createNewEvent():Post {
     return {
       id: null,
@@ -51,6 +55,11 @@ export class PostService {
     }
   }
 
+  /**
+   * 
+   * @param post Post à ajouter
+   */
+
   add(post: Post) {
     post.id = this.postIdService.get();
 
@@ -63,6 +72,11 @@ export class PostService {
         });
   }
 
+  /**
+   * 
+   * @param post Post à mettre à jour
+   */
+
   update(post: Post) {
     this.http.put(`${this.postApiUrl}/${post.id}`, post)
         .subscribe(() => {
@@ -74,18 +88,22 @@ export class PostService {
         });
   }
 
+  /**
+   * 
+   * @param post Post à insérer dans le thread
+   * @param index Index du post à insérer
+   */
+
   insert(post: Post, index: number) {
     post.id = this.postIdService.get();
     this.http.post(this.postApiUrl, post)
         .subscribe(() => {
           const contactsTab = this.postSubject.getValue()
-          const inter = this.postSubject.getValue()
           
           const tab = contactsTab.slice(index, contactsTab.length)
           for(var i = index; i< this.postSubject.getValue().length; i++) {
             this.delete(contactsTab[i]);
           }
-          console.log(this.postSubject.getValue())
           this.add(post)
           this.delete(post)
           for(var j = 0; j< tab.length; j++) {
@@ -94,6 +112,11 @@ export class PostService {
           
         });
   }
+
+  /**
+   * 
+   * @param post Post à supprimer
+   */
 
   delete(post: Post) {
     this.http.delete(`${this.postApiUrl}/${post.id}`)

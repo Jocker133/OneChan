@@ -4,7 +4,7 @@ import { Post } from './Post';
 import { PostService } from './post.service';
 import {Router} from "@angular/router";
 import { Injectable } from '@angular/core';
-import * as post from "../../db.json";
+import { AppComponent } from './app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,9 @@ import * as post from "../../db.json";
 @Component({
   selector: 'chan-post-list',
   template: `
-    <button mat-button (click)="addContact()">Add a thread</button>
+
+  
+    <button mat-button (click)="addThreadHead()">Add a thread</button>
     
     
       <mat-card *ngFor="let currentPost of pos | async; let i = index">
@@ -27,10 +29,10 @@ import * as post from "../../db.json";
           {{ currentPost.message }}
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button (click)="editContact(currentPost)">Edit</button>
-          <button mat-button (click)="deleteContact2(currentPost, i)">Delete</button>
+          <button mat-button (click)="editPost(currentPost)">Edit</button>
+          <button mat-button (click)="deletePostThread(currentPost, i)">Delete</button>
         </mat-card-actions>
-        <button mat-button (click)="addContact2(i)">Add a post in this thread</button>
+        <button mat-button (click)="addPost(i)">Add a post in this thread</button>
       </div>
 
       <div *ngIf="!currentPost.threadHead && !displayPosts.includes(currentPost)">
@@ -47,8 +49,8 @@ import * as post from "../../db.json";
         </mat-card-content>
         <mat-card-actions>
           <button mat-button (click)="answerPost(i, currentPost.id)">Answer</button>
-          <button mat-button (click)="editContact(currentPost)">Edit</button>
-          <button mat-button (click)="deleteContact(currentPost, i)">Delete</button>
+          <button mat-button (click)="editPost(currentPost)">Edit</button>
+          <button mat-button (click)="deletePost(currentPost, i)">Delete</button>
         </mat-card-actions>
 </div>
 </div>
@@ -56,6 +58,8 @@ import * as post from "../../db.json";
       </div>
       
       </mat-card>
+
+
    
   `,
   styles: [
@@ -83,12 +87,18 @@ import * as post from "../../db.json";
       border-radius: 25px;
       background: lightgrey;
     }
+    .night {
+      background-color : #1c1c1e ;
+      color : #fefefe ;
+    }
     `
   ]
 })
 export class PostListComponent implements OnInit {
+
+  /*Initialisation de toutes les variables utilisées plus tard */
+
   pos: Observable<Array<Post>>;
-  data: any = (post as any).default;
   signe: string[] = ["-", "+"];
   indexOfstring: number = 0;
   arrayOfPost: Post[];
@@ -115,6 +125,11 @@ export class PostListComponent implements OnInit {
     this.displayPosts = []
   }
 
+  /**
+   * Vérifie si le parentId du post réponse correspond à l'un des id des posts afficher actuellement, afin de pouvoir changer so couleur par la suite
+   * @param parentid 
+   */
+
   postHover(parentid: string){
     if(parentid != null && parentid != '') {
       this.postService.getList()
@@ -134,7 +149,13 @@ export class PostListComponent implements OnInit {
     this.leave = true
   }
 
-  deleteContact2(post: Post, i: number) {
+  /**
+   * Supprime la tête de thread ainsi que tous les posts qui font partie du même thread
+   * @param post 
+   * @param i 
+   */
+
+  deletePostThread(post: Post, i: number) {
     this.postService.getList()
           .subscribe(post => {
             this.arrayDelete = post as Post[]
@@ -152,19 +173,38 @@ export class PostListComponent implements OnInit {
     }
   }
 
-  deleteContact(post: Post) {
+  /**
+   * 
+   * @param post Post à supprimer
+   */
+
+  deletePost(post: Post) {
     this.postService.delete(post);
   }
 
-  editContact(post: Post) {
+  /**
+   * 
+   * @param post Edit le post ou la tête de thread
+   */
+
+  editPost(post: Post) {
     this.router.navigate(['posts', post.id, 'edit', 'true', post.threadHead]);
   }
 
-  addContact() {
+  /**
+   * Ajoute une nouvelle tête de thread
+   */
+
+  addThreadHead() {
     this.router.navigate(['posts', 'new', 'true', '', '', '']);
   }
 
-  addContact2(i: number) {
+  /**
+   * Ajoute un post à la fin du thread choisit
+   * @param i 
+   */
+
+  addPost(i: number) {
     var test: boolean = true
     this.postService.getList()
         .subscribe(post => {
@@ -179,6 +219,12 @@ export class PostListComponent implements OnInit {
     }
     this.router.navigate(['posts', 'new', 'false', i, test, '']);
   }
+
+  /**
+   * Répond par un post à la fin du thread où se trouve le post question
+   * @param i Index du post question
+   * @param id Id du post question
+   */
 
   answerPost(i: number, id: string) {
     var bool: boolean = true
@@ -195,6 +241,11 @@ export class PostListComponent implements OnInit {
     }
     this.router.navigate(['posts', 'new', 'false', i, bool, id])
   }
+
+  /**
+   * Affiche ou masque les posts présents dans le thread
+   * @param currentPost Tête de thread
+   */
 
   gestionDisplay(currentPost: Post) {
     
@@ -220,6 +271,11 @@ export class PostListComponent implements OnInit {
     else
       this.indexOfstring = 0
   }
+
+  /**
+   * Vérifie s'il y a des posts dans le thread afin d'afficher ou non le bouton "+" (Expand) ou "-" (Collapse)
+   * @param currentPost Tête de thread
+   */
 
   messages(currentPost: Post) {
     this.postService.getList()
