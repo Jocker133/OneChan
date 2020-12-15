@@ -18,76 +18,88 @@
   },
   "post": [
     {
-      "id": "74ef4a2d-33de-4c02-b93b-b123504eee7a",
-      "date": "2020-12-13T13:45:41.548Z",
+      "id": "1cc83b33-4917-453b-9cbb-4d79c5c0abae",
+      "date": "2020-12-15T13:58:54.785Z",
       "img": "test_image",
       "message": "Un message",
       "parentid": null,
-      "role": 3,
+      "role": "Administrateur",
       "threadHead": true
     },
     {
-      "id": "83345f48-120c-4bd4-9407-8b0b6bd13f9d",
-      "date": "2020-12-13T13:46:06.270Z",
+      "id": "11f3e699-01e3-4ac7-9f35-acd65dda33a2",
+      "date": "2020-12-15T14:01:28.741Z",
       "img": "test_image",
       "message": "Un message",
       "parentid": null,
-      "role": 3,
+      "role": [
+        "Anonymous"
+      ],
       "threadHead": false
     },
     {
-      "id": "a9980cb2-fa53-45b1-b381-c3df404d4588",
-      "date": "2020-12-14T16:48:16.962Z",
-      "img": "test_image",
-      "message": "Un nouveau message",
-      "parentid": null,
-      "role": 3,
-      "threadHead": false
-    },
-    {
-      "id": "0adf9a1a-c912-498f-b993-9c890c6c4913",
-      "date": "2020-12-14T20:16:30.074Z",
+      "id": "be13db0d-9966-432d-89a7-496b8ee67b6d",
+      "date": "2020-12-15T14:01:39.885Z",
       "img": "test_image",
       "message": "Un message",
       "parentid": null,
-      "role": 3,
+      "role": "Modérateur",
+      "threadHead": false
+    },
+    {
+      "id": "b8ae6ecc-c894-4201-8a6c-594aed60afa2",
+      "date": "2020-12-15T14:21:24.500Z",
+      "img": "test_image",
+      "message": "Un message",
+      "parentid": "be13db0d-9966-432d-89a7-496b8ee67b6d",
+      "role": [
+        "Anonymous"
+      ],
+      "threadHead": false
+    },
+    {
+      "id": "92545e96-d0fd-4080-ae12-ffa8e9e5c509",
+      "date": "2020-12-15T14:21:48.667Z",
+      "img": "test_image",
+      "message": "Un message réponse",
+      "parentid": "11f3e699-01e3-4ac7-9f35-acd65dda33a2",
+      "role": [
+        "Anonymous"
+      ],
+      "threadHead": false
+    },
+    {
+      "id": "216f9a38-ca53-41f4-bd42-4547a604d636",
+      "date": "2020-12-15T14:21:42.266Z",
+      "img": "test_image",
+      "message": "Un message",
+      "parentid": null,
+      "role": [
+        "Anonymous"
+      ],
       "threadHead": true
     },
     {
-      "id": "76b63d38-32f1-41d9-a024-b2f44b05c6d8",
-      "date": "2020-12-14T20:16:34.805Z",
+      "id": "c0c3c15e-0bb6-437e-88c5-2bb7c66a943e",
+      "date": "2020-12-15T14:22:26.727Z",
       "img": "test_image",
       "message": "Un message",
-      "parentid": null,
-      "role": 3,
+      "parentid": "",
+      "role": [
+        "Anonymous"
+      ],
       "threadHead": false
     },
     {
-      "id": "615213e0-7918-4539-8962-b332497831be",
-      "date": "2020-12-14T20:16:39.453Z",
+      "id": "fd258cce-4e4a-424a-a5db-77008076ddfb",
+      "date": "2020-12-15T14:22:34.684Z",
       "img": "test_image",
       "message": "Un message",
-      "parentid": null,
-      "role": 3,
+      "parentid": "c0c3c15e-0bb6-437e-88c5-2bb7c66a943e",
+      "role": [
+        "Anonymous"
+      ],
       "threadHead": false
-    },
-    {
-      "id": "f4e2fee5-ac85-43a7-b7fe-335dc309e3f3",
-      "date": "2020-12-14T20:21:04.990Z",
-      "img": "test_image",
-      "message": "Un message oui qui passe",
-      "parentid": null,
-      "role": 3,
-      "threadHead": false
-    },
-    {
-      "id": "9016be10-df1c-4463-bc5e-4c2cb7f1ceb5",
-      "date": "2020-12-14T20:20:55.911Z",
-      "img": "test_image",
-      "message": "Un message",
-      "parentid": null,
-      "role": 3,
-      "threadHead": true
     }
   ]
 }

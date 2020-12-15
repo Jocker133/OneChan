@@ -11,11 +11,15 @@ import { PostListComponent } from './post-list.component';
   template: `
     <h3>Create a new post</h3>
     <form #formElement="ngForm" (ngSubmit)="modify(formElement)">
-      <label>Image:
-        <input name="image" [(ngModel)]="post.img">
-      </label>
       <label>Message:
         <input name="message" [(ngModel)]="post.message" required>
+      </label>
+      <label>Role:
+        <select name="role" [(ngModel)]="post.role">
+          <option *ngFor="let choice of array">
+              {{ choice }}
+          </option>
+        </select>
       </label>
       <input type="submit" value="{{ createMode ? 'New One' : 'Modify' }}">
       <button type="button" routerLink="/">Back</button>
@@ -28,7 +32,7 @@ export class PostFormComponent implements OnInit {
   @Input() post: Post;
   createMode = false;
   arrayPosts: Post[];
-
+  array: string[] = ["Anonymous", "Modérateur", "Administrateur"];
 
   constructor(private postService: PostService, private router: Router, private postList: PostListComponent, private route: ActivatedRoute) { }
 
@@ -40,11 +44,13 @@ export class PostFormComponent implements OnInit {
   }
 
   modify(formElement: NgForm) {
+    console.log(this.post.img);
       this.route.paramMap.subscribe((params: ParamMap) => {
         const isHead = params.get('isHead') == 'true';
         const last = params.get('last') == 'true';
         const edit = params.get('edit') == 'true';
-        const head = params.get('head') == 'true'
+        const head = params.get('head') == 'true';
+        const id = params.get('id');
         if(this.post.id) {
           this.post.threadHead = head
           this.postService.addOrModify(this.post);
@@ -54,7 +60,8 @@ export class PostFormComponent implements OnInit {
             this.postService.addOrModify(this.post);
           } else {
             const index = params.get('index');
-            const realIndex = +index
+            const realIndex = +index;
+            this.post.parentid = id;
             if(last) {
               this.postService.addOrModify(this.post);
             } else {

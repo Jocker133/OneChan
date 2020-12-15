@@ -14,6 +14,8 @@ import { PostEditComponent } from './post-edit.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule,  MatFormFieldControl} from '@angular/material/form-field';
+import{MatInputModule} from '@angular/material/input';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import {MatButtonModule} from '@angular/material/button';
     HttpClientModule,
     BrowserAnimationsModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

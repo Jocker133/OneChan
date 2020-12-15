@@ -19,8 +19,8 @@ import * as post from "../../db.json";
       <mat-card *ngFor="let currentPost of pos | async; let i = index">
       <div *ngIf="currentPost.threadHead" class="head">
         <mat-card-header>
-          <mat-card-title>Anonymous</mat-card-title>
-          <mat-card-subtitle>{{ currentPost.date }} - {{ currentPost.id }} - role : {{ currentPost.role }}</mat-card-subtitle>
+          <mat-card-title>{{ currentPost.role }}</mat-card-title>
+          <mat-card-subtitle>Date : {{ currentPost.date }}</mat-card-subtitle>
           <button mat-button class="collapse-button" *ngIf="messages(currentPost)" (click)="gestionDisplay(currentPost)">{{ signe[indexOfstring] }}</button>
         </mat-card-header>
         <mat-card-content>
@@ -35,18 +35,23 @@ import * as post from "../../db.json";
 
       <div *ngIf="!currentPost.threadHead && !displayPosts.includes(currentPost)">
         <div class="display_post">
+        <div [class.highlight]="currentPost.id === parentPost.id">
+          <div [class.non-highlight]="leave">
         <mat-card-header>
-          <mat-card-title>Anonymous</mat-card-title>
-          <mat-card-subtitle>{{ currentPost.date }} - {{ currentPost.id }} - role : {{ currentPost.role }}</mat-card-subtitle>
+          <mat-card-title>{{ currentPost.role }}</mat-card-title>
+          <mat-card-subtitle *ngIf="currentPost.parentid != null && currentPost.parentid != '' ">This is an answer to -> <button mat-button (mouseover)="postHover(currentPost.parentid)" (mouseleave)="postLeave()">{{ currentPost.parentid }}</button></mat-card-subtitle>
+          <mat-card-subtitle>Date : {{ currentPost.date }} </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           {{ currentPost.message }}
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button>Answer</button>
+          <button mat-button (click)="answerPost(i, currentPost.id)">Answer</button>
           <button mat-button (click)="editContact(currentPost)">Edit</button>
           <button mat-button (click)="deleteContact(currentPost, i)">Delete</button>
         </mat-card-actions>
+</div>
+</div>
         </div>
       </div>
       
@@ -67,6 +72,17 @@ import * as post from "../../db.json";
     .collapse-button {
       background: #F0FFFF;
     }
+    .image {
+      max-width: 400px;
+    }
+    .highlight {
+      border-radius: 25px;
+      background: darkgrey;
+    }
+    .non-highlight {
+      border-radius: 25px;
+      background: lightgrey;
+    }
     `
   ]
 })
@@ -84,13 +100,38 @@ export class PostListComponent implements OnInit {
   arrayInsert: Post[];
   indexInsert: number;
   arrayDelete: Post[];
+  arrayAnswer: Post[];
+  arrayParent: Post[];
+  parentPost: Post;
+  leave: boolean = true
   
 
   constructor(private postService: PostService, private router: Router) { }
 
   ngOnInit(): void {
     this.pos = this.postService.getList();
+    this.parentPost = this.postService.createNewEvent()
+    this.parentPost.id = "";
     this.displayPosts = []
+  }
+
+  postHover(parentid: string){
+    if(parentid != null && parentid != '') {
+      this.postService.getList()
+          .subscribe(post => {
+            this.arrayParent = post as Post[]
+          })
+      for(var i = 0; i < this.arrayParent.length; i++) {
+        if(parentid === this.arrayParent[i].id) {
+          this.parentPost.id = parentid
+          this.leave = false
+        }
+      }
+    }
+  }
+
+  postLeave() {
+    this.leave = true
   }
 
   deleteContact2(post: Post, i: number) {
@@ -120,7 +161,7 @@ export class PostListComponent implements OnInit {
   }
 
   addContact() {
-    this.router.navigate(['posts', 'new', 'true', '', '']);
+    this.router.navigate(['posts', 'new', 'true', '', '', '']);
   }
 
   addContact2(i: number) {
@@ -136,7 +177,23 @@ export class PostListComponent implements OnInit {
       i+=1
       test = false
     }
-    this.router.navigate(['posts', 'new', 'false', i, test]);
+    this.router.navigate(['posts', 'new', 'false', i, test, '']);
+  }
+
+  answerPost(i: number, id: string) {
+    var bool: boolean = true
+    this.postService.getList()
+        .subscribe(post => {
+          this.arrayAnswer = post as Post[]
+        })
+    while(this.arrayAnswer[i+1] && !this.arrayAnswer[i+1].threadHead) {
+      i++
+    }
+    if(this.arrayAnswer[i+1] && this.arrayAnswer[i+1].threadHead) {
+      i++
+      bool = false
+    }
+    this.router.navigate(['posts', 'new', 'false', i, bool, id])
   }
 
   gestionDisplay(currentPost: Post) {

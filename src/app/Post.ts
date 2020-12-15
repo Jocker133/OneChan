@@ -8,6 +8,7 @@ enum Role {
 
 export class Post extends Thread {
     parentid: string;
-    role: Role;
+    //role: Role;
+    role: string[] = ["Anonymous", "Modérateur", "Administrateur"]
     threadHead: boolean;
 }

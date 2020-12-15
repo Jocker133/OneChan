@@ -34,7 +34,7 @@ export class PostService {
       img: "test_image",
       message: "Un message",
       parentid: null,
-      role: 3,
+      role: ["Anonymous"],
       threadHead: false
     };
   }
