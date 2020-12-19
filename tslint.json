@@ -83,7 +83,7 @@
       }
     },
     "typedef": [
-      true,
+      false,
       "call-signature"
     ],
     "typedef-whitespace": {
@@ -113,6 +113,7 @@
     },
     "whitespace": {
       "options": [
+        false,
         "check-branch",
         "check-decl",
         "check-operator",

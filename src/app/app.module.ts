@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PostFormComponent } from './post-form.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from '@angular/common/http';
 import { PostsComponent } from './posts.component';
 import { PostListComponent } from './post-list.component';
 import { PostEditComponent } from './post-edit.component';
@@ -13,7 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import{MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({

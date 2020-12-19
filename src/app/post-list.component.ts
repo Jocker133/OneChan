@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Post } from './Post';
 import { PostService } from './post.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 import { Injectable } from '@angular/core';
-import { AppComponent } from './app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +25,13 @@ import { AppComponent } from './app.component';
           <mat-card-title>{{ currentPost.role }}</mat-card-title>
           <mat-card-subtitle>Date : {{ currentPost.date }}</mat-card-subtitle>
           <button mat-button class="collapse-button" *ngIf="messages(currentPost)" (click)="gestionDisplay(currentPost)" [class.unclickable]="mutlipleB">{{ signe[indexOfstring] }}</button>
-          <button mat-button *ngIf="mutlipleB" (click)="select(currentPost)" [class.selected]="selectedPost.includes(currentPost)">{{ selectArray }}</button>
+          <!--<button mat-button *ngIf="mutlipleB" (click)="select(currentPost)" [class.selected]="selectedPost.includes(currentPost)">{{ selectArray }}</button>-->
         </mat-card-header>
         <mat-card-content>
           {{ currentPost.message }}
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button (click)="editPost(currentPost)" [class.unclickable]="mutlipleB">Edit</button>
+          <button mat-button (click)="editPost(currentPost, i)" [class.unclickable]="mutlipleB">Edit</button>
           <button mat-button (click)="dialogBox(currentPost, i)" [class.unclickable]="mutlipleB">Delete</button>
         </mat-card-actions>
         <button mat-button (click)="addPost(i)" [class.unclickable]="mutlipleB">Add a post in this thread</button>
@@ -52,18 +51,14 @@ import { AppComponent } from './app.component';
         </mat-card-content>
         <mat-card-actions>
           <button mat-button (click)="answerPost(i, currentPost.id)" [class.unclickable]="mutlipleB">Answer</button>
-          <button mat-button (click)="editPost(currentPost)" [class.unclickable]="mutlipleB">Edit</button>
+          <button mat-button (click)="editPost(currentPost, i)" [class.unclickable]="mutlipleB">Edit</button>
           <button mat-button (click)="dialogBox(currentPost, i)" [class.unclickable]="mutlipleB">Delete</button>
         </mat-card-actions>
 </div>
 </div>
         </div>
       </div>
-      
       </mat-card>
-
-
-   
   `,
   styles: [
     `
@@ -99,13 +94,13 @@ import { AppComponent } from './app.component';
     `
   ]
 })
-export class PostListComponent implements OnInit {
+export class PostListComponent implements OnInit, AfterViewChecked {
 
   /*Initialisation de toutes les variables utilisées plus tard */
 
   pos: Observable<Array<Post>>;
-  signe: string[] = ["-", "+"];
-  indexOfstring: number = 0;
+  signe: string[] = ['-', '+'];
+  indexOfstring = 0;
   arrayOfPost: Post[];
   index: number;
   displayPosts: Post[];
@@ -118,115 +113,126 @@ export class PostListComponent implements OnInit {
   arrayAnswer: Post[];
   arrayParent: Post[];
   parentPost: Post;
-  leave: boolean = true
-  arrayAllow: string[] = ["Delete without confirmation", "Delete with confirmation"]
-  numberAllow: number = 0;
-  allow: boolean = true;
-  mutlipleB: boolean = false;
-  mutlipleIndex: number = 0;
-  selectedPost: Post[] = []
-  multiple: string[] = []
-  selectArray: string[] = ["Select me"]
-  allPosts: Post[] = []
+  leave = true;
+  arrayAllow: string[] = ['Delete without confirmation', 'Delete with confirmation'];
+  numberAllow = 0;
+  allow = true;
+  mutlipleB = false;
+  mutlipleIndex = 0;
+  selectedPost: Post[] = [];
+  multiple: string[] = [];
+  selectArray: string[] = ['Select me'];
+  allPosts: Post[] = [];
   audio;
-  
-  
-  
+  testPost: Post;
 
-  constructor(private postService: PostService, private router: Router) { }
+  constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
     this.pos = this.postService.getList();
-    this.parentPost = this.postService.createNewEvent()
-    this.parentPost.id = "";
-    this.displayPosts = []
-    this.multiple = ["Touch me to delete multiple posts", "Choose posts to delete"]
+    this.parentPost = this.postService.createNewEvent();
+    this.testPost = this.postService.createNewEvent();
+    this.parentPost.id = '';
+    this.displayPosts = [];
+    this.multiple = ['Touch me to delete multiple posts', 'Choose posts to delete'];
     this.postService.getList()
           .subscribe(post => {
-            this.allPosts = post as Post[]
-          })
-    this.audio = new Audio("../assets/Villager_idle1.oga")
+            this.allPosts = post as Post[];
+          });
+    this.audio = new Audio('../assets/Villager_idle1.oga');
+  }
+
+  ngAfterViewChecked() {
+    if (this.allPosts.length !== 0) {
+      this.testPost = this.allPosts[0];
+      for (let i = 1; i < this.allPosts.length; i++) {
+        if (this.testPost.id === this.allPosts[i].id) {
+          window.location.reload();
+        }
+      }
+    }
   }
 
   modeMulti() {
-    if(!this.mutlipleB) {
-      this.mutlipleIndex = 1
-      this.mutlipleB = true
+    if (!this.mutlipleB) {
+      this.mutlipleIndex = 1;
+      this.mutlipleB = true;
     } else {
-      this.mutlipleB = false
-      this.mutlipleIndex = 0
+      this.mutlipleB = false;
+      this.mutlipleIndex = 0;
     }
   }
 
   postsDelete() {
-    if(this.selectedPost.length == 0) {
-      if(confirm("You have selected no posts to delete!!")) {
+    if (this.selectedPost.length === 0) {
+      if (confirm('You have selected no posts to delete!!')) {
 
       }
     } else {
-      for(var i = 0; i< this.selectedPost.length; i++) {
-        this.deletePost(this.selectedPost[i])
+      /* tslint:disable-next-line */
+      for (let i = 0; i < this.selectedPost.length; i++) {
+        this.deletePost(this.selectedPost[i]);
       }
+      this.mutlipleB = false;
     }
   }
 
   select(post: Post) {
-    if(this.selectedPost.includes(post)) {
-      const index = this.selectedPost.indexOf(post)
-      this.selectedPost.splice(index, 1)
+    if (this.selectedPost.includes(post)) {
+      const index = this.selectedPost.indexOf(post);
+      this.selectedPost.splice(index, 1);
     } else {
-      this.selectedPost.push(post)
+      this.selectedPost.push(post);
     }
   }
 
   allowOrNot() {
-    if(this.numberAllow == 0) {
-      this.numberAllow = 1
-      this.allow = false
+    if (this.numberAllow === 0) {
+      this.numberAllow = 1;
+      this.allow = false;
     } else {
-      this.numberAllow = 0
-      this.allow = true
+      this.numberAllow = 0;
+      this.allow = true;
     }
   }
 
   /**
-   * Vérifie si le parentId du post réponse correspond à l'un des id des posts afficher actuellement, afin de pouvoir changer so couleur par la suite
-   * @param parentid 
+   * Vérifie si le parentId du post réponse correspond à l'un des id des posts affiché
+   * @param parentid Parentid du post réponse
    */
 
   postHover(parentid: string){
-    if(parentid != null && parentid != '') {
+    if (parentid != null && parentid !== '') {
       this.postService.getList()
           .subscribe(post => {
-            this.arrayParent = post as Post[]
-          })
-      for(var i = 0; i < this.arrayParent.length; i++) {
-        if(parentid === this.arrayParent[i].id) {
-          this.parentPost.id = parentid
-          this.leave = false
+            this.arrayParent = post as Post[];
+          });
+      /* tslint:disable-next-line */
+      for (let i = 0; i < this.arrayParent.length; i++) {
+        if (parentid === this.arrayParent[i].id) {
+          this.parentPost.id = parentid;
+          this.leave = false;
         }
       }
     }
   }
 
   postLeave() {
-    this.leave = true
+    this.leave = true;
   }
 
   dialogBox(post: Post, i: number) {
-    if(!this.allow) {
-      this.audio.play()
-      if(confirm("Do you really want to delete this post/thread?")) {
-        
-        
-        if(post.threadHead) {
+    if (!this.allow) {
+      this.audio.play();
+      if (confirm('Do you really want to delete this post/thread?')) {
+        if (post.threadHead) {
           this.deletePostThread(post, i);
         } else {
           this.deletePost(post);
         }
       }
     } else {
-      if(post.threadHead) {
+      if (post.threadHead) {
         this.deletePostThread(post, i);
       } else {
         this.deletePost(post);
@@ -236,30 +242,29 @@ export class PostListComponent implements OnInit {
 
   /**
    * Supprime la tête de thread ainsi que tous les posts qui font partie du même thread
-   * @param post 
-   * @param i 
+   * @param post Tête de thread a supprimer
+   * @param i Index de la tête de thread
    */
 
   deletePostThread(post: Post, i: number) {
     this.postService.getList()
-          .subscribe(post => {
-            this.arrayDelete = post as Post[]
-          })
-    if(this.arrayDelete[i+1] && !this.arrayDelete[i+1].threadHead) {
-      var j = i
-      j++
-      while(this.arrayDelete[j] && !this.arrayDelete[j].threadHead) {
-        this.postService.delete(this.arrayDelete[j])
-        j++
+          .subscribe(posts => {
+            this.arrayDelete = posts as Post[];
+          });
+    if (this.arrayDelete[i + 1] && !this.arrayDelete[i + 1].threadHead) {
+      let j = i;
+      j++;
+      while (this.arrayDelete[j] && !this.arrayDelete[j].threadHead) {
+        this.postService.delete(this.arrayDelete[j]);
+        j++;
       }
-      this.postService.delete(this.arrayDelete[i])
+      this.postService.delete(this.arrayDelete[i]);
     } else {
       this.postService.delete(post);
     }
   }
 
   /**
-   * 
    * @param post Post à supprimer
    */
 
@@ -268,12 +273,11 @@ export class PostListComponent implements OnInit {
   }
 
   /**
-   * 
    * @param post Edit le post ou la tête de thread
    */
 
-  editPost(post: Post) {
-    this.router.navigate(['posts', post.id, 'edit', 'true', post.threadHead]);
+  editPost(post: Post, i: number) {
+    this.router.navigate(['posts', post.id, 'edit', 'true', post.threadHead, i]);
   }
 
   /**
@@ -286,21 +290,21 @@ export class PostListComponent implements OnInit {
 
   /**
    * Ajoute un post à la fin du thread choisit
-   * @param i 
+   * @param i Index de la tête de thread
    */
 
   addPost(i: number) {
-    var test: boolean = true
+    let test = true;
     this.postService.getList()
         .subscribe(post => {
-          this.arrayInsert = post as Post[]
-        })
-    while(this.arrayInsert[i+1] && !this.arrayInsert[i+1].threadHead) {
-      i+=1
+          this.arrayInsert = post as Post[];
+        });
+    while (this.arrayInsert[i + 1] && !this.arrayInsert[i + 1].threadHead) {
+      i += 1;
     }
-    if(this.arrayInsert[i+1] && this.arrayInsert[i+1].threadHead) {
-      i+=1
-      test = false
+    if (this.arrayInsert[i + 1] && this.arrayInsert[i + 1].threadHead) {
+      i += 1;
+      test = false;
     }
     this.router.navigate(['posts', 'new', 'false', i, test, '']);
   }
@@ -312,19 +316,19 @@ export class PostListComponent implements OnInit {
    */
 
   answerPost(i: number, id: string) {
-    var bool: boolean = true
+    let bool = true;
     this.postService.getList()
         .subscribe(post => {
-          this.arrayAnswer = post as Post[]
-        })
-    while(this.arrayAnswer[i+1] && !this.arrayAnswer[i+1].threadHead) {
-      i++
+          this.arrayAnswer = post as Post[];
+        });
+    while (this.arrayAnswer[i + 1] && !this.arrayAnswer[i + 1].threadHead) {
+      i++;
     }
-    if(this.arrayAnswer[i+1] && this.arrayAnswer[i+1].threadHead) {
-      i++
-      bool = false
+    if (this.arrayAnswer[i + 1] && this.arrayAnswer[i + 1].threadHead) {
+      i++;
+      bool = false;
     }
-    this.router.navigate(['posts', 'new', 'false', i, bool, id])
+    this.router.navigate(['posts', 'new', 'false', i, bool, id]);
   }
 
   /**
@@ -333,28 +337,27 @@ export class PostListComponent implements OnInit {
    */
 
   gestionDisplay(currentPost: Post) {
-    
     this.postService.getList()
         .subscribe(post => {
-          this.getPosts = post as Post[]
-        })
+          this.getPosts = post as Post[];
+        });
     this.indexThread = this.getPosts.indexOf(currentPost);
-    
-      while(this.getPosts[this.indexThread+1] && !this.getPosts[this.indexThread+1].threadHead) {
-        if(this.displayPosts.includes(this.getPosts[this.indexThread+1])) {
-          this.indexPosts = this.displayPosts.indexOf(this.getPosts[this.indexThread+1])
-          this.displayPosts.splice(this.indexPosts, 1)
-        }
-        else {
-          this.displayPosts.push(this.getPosts[this.indexThread+1])
-        }
-        this.indexThread+=1;
+    while (this.getPosts[this.indexThread + 1] && !this.getPosts[this.indexThread + 1].threadHead) {
+      if (this.displayPosts.includes(this.getPosts[this.indexThread + 1])) {
+        this.indexPosts = this.displayPosts.indexOf(this.getPosts[this.indexThread + 1]);
+        this.displayPosts.splice(this.indexPosts, 1);
       }
-    
-    if(this.indexOfstring == 0)
-      this.indexOfstring = 1
-    else
-      this.indexOfstring = 0
+      else {
+        this.displayPosts.push(this.getPosts[this.indexThread + 1]);
+      }
+      this.indexThread += 1;
+    }
+    if (this.indexOfstring === 0) {
+      this.indexOfstring = 1;
+    }
+    else {
+      this.indexOfstring = 0;
+    }
   }
 
   /**
@@ -365,11 +368,11 @@ export class PostListComponent implements OnInit {
   messages(currentPost: Post) {
     this.postService.getList()
         .subscribe(post => {
-          this.arrayOfPost = post as Post[]
-        })
+          this.arrayOfPost = post as Post[];
+        });
     this.index = this.arrayOfPost.indexOf(currentPost);
-    if(this.arrayOfPost[this.index+1]) {
-      if(this.arrayOfPost[this.index+1].threadHead) {
+    if (this.arrayOfPost[this.index + 1]) {
+      if (this.arrayOfPost[this.index + 1].threadHead) {
         return false;
       }
       else {
