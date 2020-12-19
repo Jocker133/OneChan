@@ -14,25 +14,28 @@ import { AppComponent } from './app.component';
   selector: 'chan-post-list',
   template: `
 
-  
-    <button mat-button (click)="addThreadHead()">Add a thread</button>
-    
-    
+    <button mat-button (click)="allowOrNot()" [class.unclickable]="mutlipleB">{{ arrayAllow[numberAllow] }}</button>
+    <button mat-button (click)="addThreadHead()" [class.unclickable]="mutlipleB">Add a thread</button>
+    <button mat-button (click)="modeMulti()">{{ multiple[mutlipleIndex] }}</button>
+    <button mat-button *ngIf="mutlipleB" (click)="postsDelete()">Delete the posts</button>
+    <br>
+    <img *ngIf="allPosts.length == 0" src="../assets/chat_post.jpg" height="500px" width="800px" style="display: block;margin-left: auto; margin-right: auto">
       <mat-card *ngFor="let currentPost of pos | async; let i = index">
       <div *ngIf="currentPost.threadHead" class="head">
         <mat-card-header>
           <mat-card-title>{{ currentPost.role }}</mat-card-title>
           <mat-card-subtitle>Date : {{ currentPost.date }}</mat-card-subtitle>
-          <button mat-button class="collapse-button" *ngIf="messages(currentPost)" (click)="gestionDisplay(currentPost)">{{ signe[indexOfstring] }}</button>
+          <button mat-button class="collapse-button" *ngIf="messages(currentPost)" (click)="gestionDisplay(currentPost)" [class.unclickable]="mutlipleB">{{ signe[indexOfstring] }}</button>
+          <button mat-button *ngIf="mutlipleB" (click)="select(currentPost)" [class.selected]="selectedPost.includes(currentPost)">{{ selectArray }}</button>
         </mat-card-header>
         <mat-card-content>
           {{ currentPost.message }}
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button (click)="editPost(currentPost)">Edit</button>
-          <button mat-button (click)="deletePostThread(currentPost, i)">Delete</button>
+          <button mat-button (click)="editPost(currentPost)" [class.unclickable]="mutlipleB">Edit</button>
+          <button mat-button (click)="dialogBox(currentPost, i)" [class.unclickable]="mutlipleB">Delete</button>
         </mat-card-actions>
-        <button mat-button (click)="addPost(i)">Add a post in this thread</button>
+        <button mat-button (click)="addPost(i)" [class.unclickable]="mutlipleB">Add a post in this thread</button>
       </div>
 
       <div *ngIf="!currentPost.threadHead && !displayPosts.includes(currentPost)">
@@ -40,7 +43,7 @@ import { AppComponent } from './app.component';
         <div [class.highlight]="currentPost.id === parentPost.id">
           <div [class.non-highlight]="leave">
         <mat-card-header>
-          <mat-card-title>{{ currentPost.role }}</mat-card-title>
+          <mat-card-title>{{ currentPost.role }}</mat-card-title><button mat-button *ngIf="mutlipleB" (click)="select(currentPost)" [class.selected]="selectedPost.includes(currentPost)">{{ selectArray }}</button>
           <mat-card-subtitle *ngIf="currentPost.parentid != null && currentPost.parentid != '' ">This is an answer to -> <button mat-button (mouseover)="postHover(currentPost.parentid)" (mouseleave)="postLeave()">{{ currentPost.parentid }}</button></mat-card-subtitle>
           <mat-card-subtitle>Date : {{ currentPost.date }} </mat-card-subtitle>
         </mat-card-header>
@@ -48,9 +51,9 @@ import { AppComponent } from './app.component';
           {{ currentPost.message }}
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button (click)="answerPost(i, currentPost.id)">Answer</button>
-          <button mat-button (click)="editPost(currentPost)">Edit</button>
-          <button mat-button (click)="deletePost(currentPost, i)">Delete</button>
+          <button mat-button (click)="answerPost(i, currentPost.id)" [class.unclickable]="mutlipleB">Answer</button>
+          <button mat-button (click)="editPost(currentPost)" [class.unclickable]="mutlipleB">Edit</button>
+          <button mat-button (click)="dialogBox(currentPost, i)" [class.unclickable]="mutlipleB">Delete</button>
         </mat-card-actions>
 </div>
 </div>
@@ -87,9 +90,11 @@ import { AppComponent } from './app.component';
       border-radius: 25px;
       background: lightgrey;
     }
-    .night {
-      background-color : #1c1c1e ;
-      color : #fefefe ;
+    .unclickable {
+      pointer-events: none;
+    }
+    .selected {
+      background-color: dimgrey;
     }
     `
   ]
@@ -114,6 +119,18 @@ export class PostListComponent implements OnInit {
   arrayParent: Post[];
   parentPost: Post;
   leave: boolean = true
+  arrayAllow: string[] = ["Delete without confirmation", "Delete with confirmation"]
+  numberAllow: number = 0;
+  allow: boolean = true;
+  mutlipleB: boolean = false;
+  mutlipleIndex: number = 0;
+  selectedPost: Post[] = []
+  multiple: string[] = []
+  selectArray: string[] = ["Select me"]
+  allPosts: Post[] = []
+  audio;
+  
+  
   
 
   constructor(private postService: PostService, private router: Router) { }
@@ -123,6 +140,53 @@ export class PostListComponent implements OnInit {
     this.parentPost = this.postService.createNewEvent()
     this.parentPost.id = "";
     this.displayPosts = []
+    this.multiple = ["Touch me to delete multiple posts", "Choose posts to delete"]
+    this.postService.getList()
+          .subscribe(post => {
+            this.allPosts = post as Post[]
+          })
+    this.audio = new Audio("../assets/Villager_idle1.oga")
+  }
+
+  modeMulti() {
+    if(!this.mutlipleB) {
+      this.mutlipleIndex = 1
+      this.mutlipleB = true
+    } else {
+      this.mutlipleB = false
+      this.mutlipleIndex = 0
+    }
+  }
+
+  postsDelete() {
+    if(this.selectedPost.length == 0) {
+      if(confirm("You have selected no posts to delete!!")) {
+
+      }
+    } else {
+      for(var i = 0; i< this.selectedPost.length; i++) {
+        this.deletePost(this.selectedPost[i])
+      }
+    }
+  }
+
+  select(post: Post) {
+    if(this.selectedPost.includes(post)) {
+      const index = this.selectedPost.indexOf(post)
+      this.selectedPost.splice(index, 1)
+    } else {
+      this.selectedPost.push(post)
+    }
+  }
+
+  allowOrNot() {
+    if(this.numberAllow == 0) {
+      this.numberAllow = 1
+      this.allow = false
+    } else {
+      this.numberAllow = 0
+      this.allow = true
+    }
   }
 
   /**
@@ -147,6 +211,27 @@ export class PostListComponent implements OnInit {
 
   postLeave() {
     this.leave = true
+  }
+
+  dialogBox(post: Post, i: number) {
+    if(!this.allow) {
+      this.audio.play()
+      if(confirm("Do you really want to delete this post/thread?")) {
+        
+        
+        if(post.threadHead) {
+          this.deletePostThread(post, i);
+        } else {
+          this.deletePost(post);
+        }
+      }
+    } else {
+      if(post.threadHead) {
+        this.deletePostThread(post, i);
+      } else {
+        this.deletePost(post);
+      }
+    }
   }
 
   /**
