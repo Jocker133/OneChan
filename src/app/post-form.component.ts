@@ -3,7 +3,6 @@ import {NgForm} from '@angular/forms';
 import { Post } from './Post';
 import { PostService } from './post.service';
 import { ActivatedRoute, Router , ParamMap} from '@angular/router';
-import { PostListComponent } from './post-list.component';
 
 @Component({
   selector: 'chan-post-form',
