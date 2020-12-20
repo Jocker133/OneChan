@@ -14,6 +14,7 @@ export class PostService {
   otherIndex = -1;
   arrayDebut: Post[];
   arrayEnd: Post[];
+  change = false;
 
   constructor(private postIdService: PostIdService, private http: HttpClient) {
     this.http.get<Array<Post>>(this.postApiUrl)
@@ -43,6 +44,7 @@ export class PostService {
   }
 
   addOrModify(post: Post) {
+    this.change = true;
     if (post.id) {
       this.update(post);
     } else {
@@ -98,6 +100,7 @@ export class PostService {
           for (let j = 0; j < tab.length; j++) {
             this.add(tab[j]);
           }
+          this.change = true;
         });
   }
 
@@ -113,10 +116,15 @@ export class PostService {
           contactsTab.splice(index, 1);
           this.postSubject.next(contactsTab);
         });
+    this.change = true;
   }
 
   get(id: string) {
     const contactsList = this.postSubject.getValue();
     return contactsList.find(post => post.id = id);
+  }
+
+  getChange() {
+    return this.change;
   }
 }

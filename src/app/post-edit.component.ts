@@ -15,6 +15,7 @@ export class PostEditComponent implements OnInit {
   post: Post;
   loading = true;
   arrayOfPosts: Post[] = [];
+  arrayofTest: Post[] = [];
 
   constructor(private postService: PostService, private route: ActivatedRoute) {}
 
@@ -29,9 +30,13 @@ export class PostEditComponent implements OnInit {
         });
 
       if (id) {
-        this.post = this.postService.get(this.arrayOfPosts[i].id);
+        this.postService.getList()
+        .subscribe(post => {
+          this.arrayofTest = post as Post[];
+        });
+        this.post = this.arrayofTest[i];
+        console.log(this.post.message);
       }
-
       this.loading = false;
     });
   }

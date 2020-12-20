@@ -124,14 +124,13 @@ export class PostListComponent implements OnInit, AfterViewChecked {
   selectArray: string[] = ['Select me'];
   allPosts: Post[] = [];
   audio;
-  testPost: Post;
+  changes: boolean;
 
   constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
     this.pos = this.postService.getList();
     this.parentPost = this.postService.createNewEvent();
-    this.testPost = this.postService.createNewEvent();
     this.parentPost.id = '';
     this.displayPosts = [];
     this.multiple = ['Touch me to delete multiple posts', 'Choose posts to delete'];
@@ -142,13 +141,15 @@ export class PostListComponent implements OnInit, AfterViewChecked {
     this.audio = new Audio('../assets/Villager_idle1.oga');
   }
 
+  /**
+   * Recharge la page s'il y a eu un add/update/insert/delete
+   */
+
   ngAfterViewChecked() {
     if (this.allPosts.length !== 0) {
-      this.testPost = this.allPosts[0];
-      for (let i = 1; i < this.allPosts.length; i++) {
-        if (this.testPost.id === this.allPosts[i].id) {
-          window.location.reload();
-        }
+      this.changes = this.postService.getChange();
+      if (this.changes) {
+        window.location.reload();
       }
     }
   }
