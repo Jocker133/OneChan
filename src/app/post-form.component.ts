@@ -10,7 +10,7 @@ import { ActivatedRoute, Router , ParamMap} from '@angular/router';
     <h3>Create a new post</h3>
     <form #formElement="ngForm" (ngSubmit)="modify(formElement)">
       <label>Message:
-        <input name="message" [(ngModel)]="post.message" required>
+        <textarea name="message" [(ngModel)]="post.message" required></textarea>
       </label>
       <label>Role:
         <select name="role" [(ngModel)]="post.role">

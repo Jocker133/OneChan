@@ -34,7 +34,7 @@ La version "without" vous laissera supprimer un post/thread sans problème, mais
 
 Le bouton suivant, "Add a thread" vous enverra vers un formulaire pour créer une tête de thread (pour commencer une discussion).
 
-"Touch me to delete multiple posts" va vous changer de "mode" puisqu'une fois que vous aurez cliqué dessus vous ne pourre plus cliquer que sur "Select me" que vous trouverez sur les têtes de thread/posts et sur "Delete the posts", qui vous permettra de supprimer tout ce que vous aurez sélectionné. Bien sur si vous cliquez sur "Choose posts to delete" vous repasserez en mode "normal". Et n'essayez pas de cliquer sur "Delete posts" sans avoir sélectionné de posts au préalable, on vous surveille (un popup vous dira non).
+"Touch me to delete multiple posts" va vous changer de "mode" puisqu'une fois que vous aurez cliqué dessus vous ne pourre plus cliquer que sur "Select me" que vous trouverez sur les posts et sur "Delete the posts", qui vous permettra de supprimer tout ce que vous aurez sélectionné. Bien sur si vous cliquez sur "Choose posts to delete" vous repasserez en mode "normal". Et n'essayez pas de cliquer sur "Delete posts" sans avoir sélectionné de posts au préalable, on vous surveille (un popup vous dira non).
 
 Maintenant que ces trois boutons ont été expliqués, passons à la gestion des thread.
 

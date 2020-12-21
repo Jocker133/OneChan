@@ -4,6 +4,9 @@ import { ViewEncapsulation } from '@angular/core';
 @Component({
   selector: 'chan-root',
   template: `
+    <img src="../assets/Onechan.png" class="welcome" width="250px">
+    <br>
+    <br>
     <img src="../assets/welcome.jpg" height="350px" class="welcome" width="500px">
     <br>
     <router-outlet></router-outlet>

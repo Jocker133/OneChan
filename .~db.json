@@ -51,19 +51,19 @@
       "threadHead": false
     },
     {
-      "id": "298078d8-eff3-4b95-a2b9-b15a8ad5c900",
-      "date": "2020-12-21T15:18:06.865Z",
+      "id": "9b7e66e9-640b-42e0-a70d-bc1cfb506374",
+      "date": "2020-12-20T12:36:59.149Z",
       "img": "test_image",
-      "message": "Un message très long qui marche bien",
-      "parentid": "",
+      "message": "Un message",
+      "parentid": null,
       "role": [
         "Anonymous"
       ],
-      "threadHead": false
+      "threadHead": true
     },
     {
-      "id": "9b7e66e9-640b-42e0-a70d-bc1cfb506374",
-      "date": "2020-12-20T12:36:59.149Z",
+      "id": "c1f381ac-7107-45aa-9ff3-6a5be157f802",
+      "date": "2020-12-21T15:10:02.013Z",
       "img": "test_image",
       "message": "Un message",
       "parentid": null,
